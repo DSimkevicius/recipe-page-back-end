@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const mysql = require("mysql2/promise");
 require("dotenv").config();
+
+const authRoutes = require("./routes/auth");
+const recipesRoutes = require("./routes/recipes");
 
 const app = express();
 
@@ -9,8 +11,11 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("OK");
+  res.send({ msg: "Server is running successfully" });
 });
+
+app.use("/auth", authRoutes);
+app.use("/recipes", recipesRoutes);
 
 app.all("*", (req, res) => {
   res.status(404).send({ error: "Page not found" });
