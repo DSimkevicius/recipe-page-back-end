@@ -51,6 +51,7 @@ router.post("/login", async (req, res) => {
     if (!passwordValidity) {
       return res.status(400).send({ err: "Email or password is incorrect" });
     }
+    const id = data[0].id;
     const token = jwt.sign(
       {
         id: data[0].id,
@@ -59,7 +60,7 @@ router.post("/login", async (req, res) => {
       jwtSecret,
       { expiresIn: 60 * 60 }
     );
-    return res.send({ msg: "Successfully logged in", token });
+    return res.send({ msg: "Successfully logged in", token, id });
   } catch (e) {
     console.log(e);
     res.status(500).send({ error: "DB error" });
