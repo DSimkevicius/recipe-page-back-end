@@ -7,31 +7,12 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const con = await mysql.createConnection(mysqlConfig);
-    const [data] = await con.execute(`SELECT * FROM recipes LIMIT 10`);
+    const [data] = await con.execute(`SELECT * FROM recipes LIMIT 30`);
     con.end();
     res.send(data);
   } catch (e) {
     console.log(e);
     res.status(500).send({ error: "Issue with connection. Please try again" });
-  }
-});
-
-router.get("/:id", async (req, res) => {
-  try {
-    const con = await mysql.createConnection(mysqlConfig);
-
-    const [recipes] = await con.execute(
-      `SELECT * FROM recipes WHERE id = ${mysql.escape(req.params.id)}`
-    );
-
-    const [comments] = await con.execute(
-      `SELECT * FROM comments WHERE recipe_id = ${mysql.escape(req.params.id)}`
-    );
-
-    res.send({ data: { recipes, comments } });
-  } catch (e) {
-    console.log(e);
-    return res.status(500).send({ error: "Unexpected error" });
   }
 });
 
@@ -60,6 +41,25 @@ router.post("/", async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(500).send({ error: "Issue with connection. Please try again" });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const con = await mysql.createConnection(mysqlConfig);
+
+    const [recipes] = await con.execute(
+      `SELECT * FROM recipes WHERE id = ${mysql.escape(req.params.id)}`
+    );
+
+    const [comments] = await con.execute(
+      `SELECT * FROM comments WHERE recipe_id = ${mysql.escape(req.params.id)}`
+    );
+
+    res.send({ data: { recipes, comments } });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send({ error: "Unexpected error" });
   }
 });
 
