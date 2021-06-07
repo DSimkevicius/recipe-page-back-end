@@ -1,5 +1,5 @@
 {
-  "name": "eshop",
+  "name": "recipe",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
